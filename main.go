@@ -1,10 +1,21 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
-	"log"
+	"fmt"
 	"net/http"
 	"github.com/gorilla/mux"
+
+	_ "github.com/lib/pq"
+)
+
+const (
+	host = "localhost"
+	port = 5432
+	user = "postgres"
+	password = ""
+	dbname = "afkc"
 )
 
 type Task struct {
@@ -27,6 +38,9 @@ func main() {
 }
 
 func GetTasks(w http.ResponseWriter, r *http.Request) {
+	db := connectToDb()
+	defer db.Close()
+
 	json.NewEncoder(w).Encode(tasks)
 }
 
@@ -60,3 +74,17 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(deleted)
 }
 
+func getConnectionString() string {
+	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+						host, port, user, password, dbname,
+	)
+}
+
+func connectToDb() *sql.DB {
+	psqlInfo := getConnectionString()
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
+	return db
+}
