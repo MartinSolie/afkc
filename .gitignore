@@ -1,0 +1,6 @@
+dbconfig.yml
+
+*.db
+
+.vscode/**
+
