@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -11,25 +10,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-const (
-	// sqlite3|postgres
-	dbType = "sqlite3"
-
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = ""
-	dbname   = "afkc"
-
-	sqliteDbPath = "./test.db"
-)
-
-func panicOnError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
 
 func GetTasks(w http.ResponseWriter, r *http.Request) {
 	db := connectToDb()
@@ -115,26 +95,5 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(params["id"])
-}
-
-func getConnectionString(db string) (dbInfo string, success bool) {
-	if db == "postgres" {
-		return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-			host, port, user, password, dbname,
-		), true
-	} else if db == "sqlite3" {
-		return sqliteDbPath, true
-	}
-	return "", false
-}
-
-func connectToDb() *sql.DB {
-	dbInfo, success := getConnectionString(dbType)
-	if !success {
-		panic(fmt.Sprintf("Unknown dbType: %s", dbType))
-	}
-	db, err := sql.Open(dbType, dbInfo)
-	panicOnError(err)
-	return db
 }
 

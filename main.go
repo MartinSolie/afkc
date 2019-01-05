@@ -15,3 +15,9 @@ func main() {
 	http.ListenAndServe(":8000", router)
 }
 
+func panicOnError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
