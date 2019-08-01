@@ -1,5 +1,4 @@
 dist: bionic
-language: go
 addons:
   apt:
     source:
@@ -10,8 +9,8 @@ services:
 - docker
 script:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- version=$(test -z $TRAVIS_TAG && echo $CI_COMMIT_SHA || echo $TRAVIS_COMMIT)
-- docker build -t martinsolie/afkc:$version .
+# - version=$(test -z $TRAVIS_TAG && echo $CI_COMMIT_SHA || echo $TRAVIS_COMMIT)
+- docker build -t martinsolie/afkc:travis-test .
 - docker push martinsolie/afkc:$version
 env:
   global:
