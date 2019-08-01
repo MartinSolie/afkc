@@ -1,0 +1,19 @@
+dist: bionic
+language: go
+addons:
+  apt:
+    source:
+    - docker-bionic
+    packages:
+    - docker
+services:
+- docker
+script:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- version=$(test -z $TRAVIS_TAG && echo $CI_COMMIT_SHA || echo $TRAVIS_COMMIT)
+- docker build -t martinsolie/afkc:$version .
+- docker push martinsolie/afkc:$version
+env:
+  global:
+  - secure: py/X0kDvWvSLVvadBi1PIxkQdAkIFXCs9jI9ttY3+5mZpiab45im9sdeLEtlvlCzzBir2zLj7PaA1oFvsaX208RH1eZ3M7AM44bA9www/9PS0B47BxQnDHcntNZkyBu1qIV2w2VCaRJDZ7xGxIiZJcGPrKklblLrFH3KxqMI4F0oKpRK6kT69HuZA6Ah+modVhyDp5D37IUZu0bqhx8iatS1de21oE+nXa1kH7oOnlHjiFHmyBX4ph282z6qZGkOhb8vtzKpOkgTSNAJLlfU/BKlUIL30zniTySm0NUJac9CksW0qOre4k5tum7X6HHS8mhMpvChWXtBEck5AoJGSmq4ijSybgt1ar1EzmVNQ+r1AjT3rShQePyzxevRI0mbgLuwreKg++XKiNMK6B4bL4eS4uO8izS1TGAvAbPQSyU9pbehHp36r3HcsCKiVVoHkvBZS/KHF/t30oM3hHMRINrFptzfST1PC22gK+MQzPZLGxdqwqIypd9sBGO0V7a5kQsuZJ8tEBaXxtmNKJwshZRaLDz/mKGN3ZDTOYGM0R3rvGz51J9Wst6GMjEfQUkIAQJEvHDg4nLCXaYSVA+mysh7UalvC6dovNrN5HJpNq2Hw5aQjR/2/zHJ4H2NM/sCgLkGZmDDnb0soqfSBEAnaX8AgFTG9fQXMPu4oikEOBA=
+  - secure: TdIKkqH1AtX1iT7cv/za0hLmsTStvOUgECSOtjJOHjwA67klIRX7DBV37DEc2mhpoaU16apnz9PFTj0Aly9kbYqXOjxAdlPkLUQ3SLcedCWE+gFHdo5BwHj4GlfLo5ioe44JGOuz/rH5stD6v2UGtBu+ins2533LzpcA1aqCR/nzyA1jyuqdt3NM1YxczIUIsS8dZOd5BiqTltm96nja+BHsQFvTj1mYcCydILYWBb4wI1fEDdOg+fxmcoHtfV8CyRyxfw0cmNWiuJgU2vqtAZq7/GZvkJw2BEk4k6U2IiQxV4/w2Ymf379ARC1So7soNrWw6sl6PPIx1w1Ga0N5kabZY/vSm6C9IT9PNqqKdD1xyuDoaDYGv+lWRdl/wXlLxeCAOrd1p9TZVcyDXXd0/L/61e1jILlhylxvjC/AWqlNC4X3wvoHV1cspphwevvYTYmoVa2X/RYVW6n68L7hirS5DwFhhBT6oniL9jXk45iv88zPBAPmf6KP91477A3mAbpScN7jZQJLXeGKU8idUPVEkBprcwLduWixWEjnc5DFfZMtlsB6EvUgeqkGVnYIT9w6m6eGwAWuPNTaWxC82aviWfHD9/1ECqg7jZxVGTjgXS/9cLG66s1KWouA4d9pYiQkMoqc+tZDwVju+R3OqQMjlIzBHwxzVbKsCS1Go5I=
