@@ -9,7 +9,7 @@ services:
 - docker
 script:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- export IMAGE_TAG=$(test -z $TRAVIS_TAG && echo $CI_COMMIT_SHA || echo $TRAVIS_COMMIT)
+- export IMAGE_TAG=$(test -z $TRAVIS_TAG && echo $TRAVIS_COMMIT || echo $TRAVIS_TAG)
 - docker build -t martinsolie/afkc:${IMAGE_TAG} .
 - docker push martinsolie/afkc:${IMAGE_TAG}
 env:
